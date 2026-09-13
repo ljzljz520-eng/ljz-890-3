@@ -1,0 +1,60 @@
+<%
+  var tabs = [
+    { k: 'pending',  label: '待审核' },
+    { k: 'approved', label: '已公开' },
+    { k: 'rejected', label: '未公开' }
+  ];
+%>
+<%- include('../partials/head', { pageTitle: '家属记忆审核' }) %>
+<%- include('../partials/header', { active: 'admin-memories', pendingCounts: pendingCounts }) %>
+<%- include('../partials/flash') %>
+
+<div class="wrap admin-main">
+  <div class="admin-head"><h1>家属记忆</h1></div>
+
+  <nav class="decade-nav" style="padding:0 0 16px">
+    <% tabs.forEach(function(t){ %>
+      <a href="/admin/memories?status=<%= t.k %>" class="<%= status === t.k ? 'active' : '' %>">
+        <%= t.label %><span class="count">(<%= counts[t.k] %>)</span>
+      </a>
+    <% }) %>
+  </nav>
+
+  <% if (memories.length === 0) { %>
+    <div class="empty">该分类下暂无记忆。</div>
+  <% } %>
+
+  <% memories.forEach(function(m){ %>
+    <div class="review-memory">
+      <div class="top">
+        <span>
+          <strong style="color:var(--ink)"><%= m.author_name %></strong>
+          <%= m.relation ? ' · ' + m.relation : '' %>
+          为《<a href="/photos/<%= m.photo_id %>" target="_blank"><%= m.photo_title %></a>》补充
+          <span class="badge <%= m.status %>" style="margin-left:8px">
+            <%= {pending:'待审核',approved:'已公开',rejected:'未公开'}[m.status] %>
+          </span>
+        </span>
+        <span><%= m.created_at %> 提交<% if (m.reviewed_at) { %> · <%= m.reviewed_at.slice(0,10) %> 审核<% } %></span>
+      </div>
+      <p class="quote"><%= m.content %></p>
+      <div class="contact">联系方式（不公开）：<%= m.contact %></div>
+      <% if (m.admin_note) { %><div class="contact">审核备注：<%= m.admin_note %></div><% } %>
+
+      <div class="actions" style="margin-top:12px">
+        <% if (m.status !== 'approved') { %>
+        <form method="post" action="/admin/memories/<%= m.id %>/approve">
+          <button class="btn small" type="submit">通过并公开</button>
+        </form>
+        <% } %>
+        <% if (m.status !== 'rejected') { %>
+        <form method="post" action="/admin/memories/<%= m.id %>/reject">
+          <button class="btn small danger" type="submit">不予公开</button>
+        </form>
+        <% } %>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,46 @@
+<%- include('../partials/head', { pageTitle: '补充记忆 · ' + photo.title }) %>
+<%- include('../partials/header', { active: 'browse' }) %>
+<%- include('../partials/flash') %>
+
+<div class="wrap">
+  <div class="crumbs" style="padding-top:26px">
+    <a href="/">馆首页</a><span>/</span><a href="/photos/<%= photo.id %>"><%= photo.title %></a><span>/</span>补充记忆
+  </div>
+
+  <form class="panel" method="post" action="/photos/<%= photo.id %>/memories">
+    <h1>为这张照片补充记忆</h1>
+    <p class="desc">《<%= photo.title %>》（<%= photo.archive_no %>）。您的文字提交后不会立即显示，将由档案馆工作人员审核，核实后公开于此页。</p>
+
+    <div class="field-row">
+      <div class="field">
+        <label>您的称呼<span class="req">*</span></label>
+        <input type="text" name="author_name" maxlength="40" required value="<%= form.author_name || '' %>" placeholder="如：王秀兰">
+      </div>
+      <div class="field">
+        <label>与照片人物的关系</label>
+        <input type="text" name="relation" maxlength="40" value="<%= form.relation || '' %>" placeholder="如：孙女 / 老邻居">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>联系方式<span class="req">*</span></label>
+      <input type="text" name="contact" maxlength="120" required value="<%= form.contact || '' %>" placeholder="手机号或电子邮箱，仅供核实联系，不予公开">
+      <div class="hint">仅用于工作人员核实，不会在网站公开。</div>
+    </div>
+
+    <div class="field">
+      <label>记忆内容<span class="req">*</span></label>
+      <textarea name="content" rows="7" maxlength="2000" required placeholder="您记得的人名、拍摄缘由、照片里的故事……"><%= form.content || '' %></textarea>
+      <div class="hint">建议只写您确有把握的内容；不确定处可注明“听长辈说”等。</div>
+    </div>
+
+    <% if (error) { %><div class="field-error"><%= error %></div><% } %>
+
+    <div style="margin-top:8px">
+      <button class="btn" type="submit">提交，等待审核</button>
+      <a class="btn secondary" href="/photos/<%= photo.id %>">返回照片</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

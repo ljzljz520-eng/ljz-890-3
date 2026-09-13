@@ -1,0 +1,10 @@
+<%- include('partials/head', { pageTitle: '出错了' }) %>
+<%- include('partials/header', { active: '' }) %>
+<div class="wrap">
+  <div class="panel" style="text-align:center">
+    <h1>出了一点问题</h1>
+    <p class="desc"><%= message || '服务器暂时无法完成这个请求。' %></p>
+    <a class="btn" href="/">返回馆首页</a>
+  </div>
+</div>
+<%- include('partials/footer') %>

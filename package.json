@@ -1,0 +1,23 @@
+{
+  "name": "old-photo-archive",
+  "version": "1.0.0",
+  "private": true,
+  "description": "旧影修复档案馆 —— 老照片修复与家属记忆的公开档案",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node tools/seed.js",
+    "reset": "rm -f data/archive.db && node tools/seed.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.10.0",
+    "compression": "^1.8.2",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-session": "^1.19.0",
+    "method-override": "^3.0.0",
+    "multer": "^1.4.5-lts.2",
+    "sharp": "^0.33.5"
+  }
+}

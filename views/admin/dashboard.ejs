@@ -1,0 +1,51 @@
+<%- include('../partials/head', { pageTitle: '工作台概览' }) %>
+<%- include('../partials/header', { active: 'admin', pendingCounts: pendingCounts }) %>
+<%- include('../partials/flash') %>
+
+<div class="wrap admin-main">
+  <div class="admin-head">
+    <h1>工作台概览</h1>
+    <a class="btn" href="/admin/photos/new">上传新档案</a>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><div class="n"><%= stats.published %></div><div class="l">公开档案</div></div>
+    <div class="stat"><div class="n"><%= stats.draft %></div><div class="l">草稿</div></div>
+    <div class="stat"><div class="n" style="color:var(--warn)"><%= stats.pendingMemories %></div><div class="l">待审记忆</div></div>
+    <div class="stat"><div class="n"><%= stats.approvedMemories %></div><div class="l">已公开记忆</div></div>
+  </div>
+
+  <div class="admin-head">
+    <h1 style="font-size:18px">待审家属记忆</h1>
+    <a href="/admin/memories" class="btn secondary small">全部记忆</a>
+  </div>
+
+  <% if (pending.length === 0) { %>
+    <div class="empty">暂无待审核的记忆。</div>
+  <% } else { %>
+    <% pending.slice(0,5).forEach(function(m){ %>
+      <div class="review-memory">
+        <div class="top">
+          <span>
+            <strong style="color:var(--ink)"><%= m.author_name %></strong>
+            <%= m.relation ? ' · ' + m.relation : '' %>
+            为《<a href="/photos/<%= m.photo_id %>" target="_blank"><%= m.photo_title %></a>》补充
+          </span>
+          <span><%= m.created_at %></span>
+        </div>
+        <p class="quote"><%= m.content %></p>
+        <div class="contact">联系（不公开）：<%= m.contact %></div>
+        <div class="actions" style="margin-top:12px">
+          <form method="post" action="/admin/memories/<%= m.id %>/approve">
+            <button class="btn small" type="submit">通过并公开</button>
+          </form>
+          <form method="post" action="/admin/memories/<%= m.id %>/reject">
+            <button class="btn small danger" type="submit">不予公开</button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

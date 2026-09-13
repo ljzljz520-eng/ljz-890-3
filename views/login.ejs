@@ -1,0 +1,27 @@
+<%- include('partials/head', { pageTitle: '工作人员登录' }) %>
+<%- include('partials/header', { active: 'login' }) %>
+<%- include('partials/flash') %>
+
+<div class="wrap">
+  <form class="panel login-wrap" method="post" action="/login">
+    <h1>工作台登录</h1>
+    <p class="desc">档案馆工作人员入口。家属无需登录，可直接在照片页提交记忆。</p>
+
+    <div class="field">
+      <label>用户名</label>
+      <input type="text" name="username" required autofocus value="<%= username || '' %>">
+    </div>
+    <div class="field">
+      <label>口令</label>
+      <input type="password" name="password" required>
+    </div>
+
+    <% if (error) { %><div class="field-error"><%= error %></div><% } %>
+
+    <div style="margin-top:6px">
+      <button class="btn" type="submit">登 录</button>
+    </div>
+  </form>
+</div>
+
+<%- include('partials/footer') %>

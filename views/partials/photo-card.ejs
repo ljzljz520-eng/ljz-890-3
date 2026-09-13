@@ -1,0 +1,9 @@
+<a class="photo-card" href="/photos/<%= p.id %>">
+  <div class="photo-frame">
+    <img src="/uploads/<%= p.image_after %>" alt="<%= p.title %>（修复后）" loading="lazy">
+  </div>
+  <div class="no"><%= p.archive_no %></div>
+  <h3><%= p.title %></h3>
+  <div class="era"><%= p.era %><%= p.location ? ' · ' + p.location : '' %></div>
+  <% if (p.subject) { %><p class="subject"><%= truncate(p.subject, 60) %></p><% } %>
+</a>

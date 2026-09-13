@@ -1,0 +1,32 @@
+<%- include('partials/head', { pageTitle: '档案浏览' }) %>
+<%- include('partials/header', { active: 'browse' }) %>
+<%- include('partials/flash') %>
+
+<div class="wrap">
+  <div class="section-head" style="margin-top:34px">
+    <h2>档案浏览</h2>
+    <div class="meta"><%= total %> 份档案 · 按入藏年代排列</div>
+  </div>
+
+  <nav class="decade-nav" aria-label="按年代筛选">
+    <a href="/photos" class="<%= currentEra === 'all' ? 'active' : '' %>">全部</a>
+    <% decades.forEach(function(d){ %>
+      <a href="/photos?era=<%= d.decade === null ? 'unknown' : d.decade %>"
+         class="<%= String(currentEra) === String(d.decade) ? 'active' : '' %>">
+        <%= d.decade === null ? '年代待考' : d.decade + ' 年代' %><span class="count">(<%= d.cnt %>)</span>
+      </a>
+    <% }) %>
+  </nav>
+
+  <% if (photos.length === 0) { %>
+    <div class="empty">该年代暂无公开档案。</div>
+  <% } else { %>
+    <div class="photo-grid">
+      <% photos.forEach(function(p){ %>
+        <%- include('partials/photo-card', { p: p }) %>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>

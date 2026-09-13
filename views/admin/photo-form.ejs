@@ -1,0 +1,98 @@
+<%
+  var p = photo || {};
+  var isEdit = !!p.id;
+  var f = form || {};
+  function val(k){ return f[k] !== undefined ? f[k] : (p[k] != null ? p[k] : ''); }
+%>
+<%- include('../partials/head', { pageTitle: isEdit ? '编辑档案' : '上传新档案' }) %>
+<%- include('../partials/header', { active: isEdit ? 'admin-photo-edit' : 'admin-photo-form', pendingCounts: pendingCounts }) %>
+<%- include('../partials/flash') %>
+
+<div class="wrap admin-main">
+  <div class="crumbs" style="padding:0 0 14px">
+    <a href="/admin">工作台</a><span>/</span><a href="/admin/photos">照片档案</a><span>/</span><%= isEdit ? '编辑 ' + p.archive_no : '上传新档案' %>
+  </div>
+
+  <form class="panel wide" method="post" enctype="multipart/form-data"
+        action="<%= isEdit ? '/admin/photos/' + p.id + '/edit' : '/admin/photos' %>">
+    <h1><%= isEdit ? '编辑照片档案' : '上传新照片档案' %></h1>
+    <p class="desc">请如实著录。修复前后两张图片均须上传，系统会统一缩放，不做自动美颜。</p>
+
+    <div class="upload-row">
+      <div class="field">
+        <label>修复前照片<span class="req">*</span></label>
+        <div class="upload-box">
+          <input type="file" id="file-before" name="before" accept="image/*" <%= isEdit ? '' : 'required' %>>
+          <img id="preview-before" class="preview" alt="修复前预览" <% if (isEdit && p.image_before) { %>src="/uploads/<%= p.image_before %>" style="display:block"<% } %>>
+          <div class="hint"><%= isEdit ? '不重新选择则保留原图。' : '残损原貌扫描件或翻拍件。' %></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>修复后照片<span class="req">*</span></label>
+        <div class="upload-box">
+          <input type="file" id="file-after" name="after" accept="image/*" <%= isEdit ? '' : 'required' %>>
+          <img id="preview-after" class="preview" alt="修复后预览" <% if (isEdit && p.image_after) { %>src="/uploads/<%= p.image_after %>" style="display:block"<% } %>>
+          <div class="hint"><%= isEdit ? '不重新选择则保留原图。' : '经人工修复后的成品。' %></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>照片标题<span class="req">*</span></label>
+      <input type="text" name="title" maxlength="80" required value="<%= val('title') %>" placeholder="如：码头边的全家合影">
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>拍摄年代<span class="req">*</span></label>
+        <input type="text" name="era" maxlength="40" required value="<%= val('era') %>" placeholder="如：1930 年代 / 1956 年夏">
+        <div class="hint">尽量写明年份，系统据此归入十年分组。</div>
+      </div>
+      <div class="field">
+        <label>拍摄地</label>
+        <input type="text" name="location" maxlength="80" value="<%= val('location') %>" placeholder="如：上海 · 苏州河畔">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>人物说明</label>
+      <textarea name="subject" rows="3" maxlength="1000" placeholder="照片中的人物、身份与站位，不确定者注明“待考”。"><%= val('subject') %></textarea>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>来源<span class="req">*</span></label>
+        <input type="text" name="source" maxlength="120" required value="<%= val('source') %>" placeholder="捐赠人姓名 / 机构，或“不愿具名”">
+      </div>
+      <div class="field">
+        <label>来源附言</label>
+        <input type="text" name="source_note" maxlength="200" value="<%= val('source_note') %>" placeholder="如：家中留存的唯一一张底片">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>档案记述</label>
+      <textarea name="description" rows="5" maxlength="3000" placeholder="照片内容、破损情况与修复经过，可分段。"><%= val('description') %></textarea>
+    </div>
+
+    <div class="field">
+      <label>发布状态</label>
+      <select name="status">
+        <% var st = val('status') || 'published'; %>
+        <option value="published" <%= st === 'published' ? 'selected' : '' %>>立即公开</option>
+        <option value="draft" <%= st === 'draft' ? 'selected' : '' %>>存为草稿（前台不可见）</option>
+        <option value="archived" <%= st === 'archived' ? 'selected' : '' %>>归档（暂不公开）</option>
+      </select>
+    </div>
+
+    <% if (error) { %><div class="field-error"><%= error %></div><% } %>
+
+    <div style="margin-top:10px">
+      <button class="btn" type="submit"><%= isEdit ? '保存修改' : '入 藏' %></button>
+      <a class="btn secondary" href="/admin/photos">取消</a>
+    </div>
+  </form>
+</div>
+
+<script src="/js/photo-form.js"></script>
+<%- include('../partials/footer') %>

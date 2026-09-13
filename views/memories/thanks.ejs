@@ -1,0 +1,18 @@
+<%- include('../partials/head', { pageTitle: '已收到您的记忆' }) %>
+<%- include('../partials/header', { active: 'browse' }) %>
+
+<div class="wrap">
+  <div class="panel" style="text-align:center">
+    <h1 style="letter-spacing:.14em">记忆已收到</h1>
+    <p class="desc" style="margin-top:14px">
+      感谢您为《<%= photo.title %>》补充这段记忆。<br>
+      它目前处于<strong>待审核</strong>状态，经工作人员核实后，将公开在照片页面。
+    </p>
+    <div style="margin-top:20px">
+      <a class="btn" href="/photos/<%= photo.id %>">返回照片页面</a>
+      <a class="btn secondary" href="/photos">继续浏览档案</a>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

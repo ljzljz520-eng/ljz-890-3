@@ -1,0 +1,77 @@
+<%- include('partials/head', { pageTitle: photo.title }) %>
+<%- include('partials/header', { active: 'browse' }) %>
+<%- include('partials/flash') %>
+
+<div class="wrap">
+  <div class="crumbs">
+    <a href="/">馆首页</a><span>/</span><a href="/photos">档案浏览</a><span>/</span><%= photo.archive_no %>
+  </div>
+
+  <article class="detail">
+    <div>
+      <div class="compare">
+        <div class="stage">
+          <img class="layer-before" src="/uploads/<%= photo.image_before %>" alt="<%= photo.title %> · 修复前">
+          <div class="layer-after">
+            <img src="/uploads/<%= photo.image_after %>" alt="<%= photo.title %> · 修复后">
+          </div>
+          <span class="tag tag-before">修 复 前</span>
+          <span class="tag tag-after">修 复 后</span>
+          <span class="divider"></span>
+          <span class="handle">◂ ▸</span>
+          <input type="range" min="0" max="100" value="50" aria-label="拖动对比修复前后">
+        </div>
+      </div>
+      <p class="compare-hint">拖 动 滑 杆 &nbsp;·&nbsp; 左 为 原 貌 &nbsp;·&nbsp; 右 为 修 复</p>
+    </div>
+
+    <div>
+      <h1 class="detail-title"><%= photo.title %></h1>
+      <div class="detail-no"><%= photo.archive_no %></div>
+
+      <table class="meta-table">
+        <tr><th>拍摄年代</th><td><%= photo.era %></td></tr>
+        <% if (photo.location) { %><tr><th>拍 摄 地</th><td><%= photo.location %></td></tr><% } %>
+        <% if (photo.subject) { %><tr><th>人物说明</th><td><%= photo.subject %></td></tr><% } %>
+        <tr><th>档案来源</th><td><%= photo.source || '捐赠人不愿具名' %><% if (photo.source_note) { %><br><span style="color:var(--ink-faint);font-size:13.5px"><%= photo.source_note %></span><% } %></td></tr>
+        <tr><th>入藏时间</th><td><%= (photo.published_at || photo.created_at).slice(0,10) %></td></tr>
+      </table>
+
+      <% if (photo.description) { %>
+        <div class="prose">
+          <h4>档 案 记 述</h4>
+          <% photo.description.split(/\r?\n+/).forEach(function(p){ if (p.trim()) { %><p><%= p.trim() %></p><% } }) %>
+        </div>
+      <% } %>
+    </div>
+  </article>
+
+  <section class="memories">
+    <div class="section-head">
+      <h2>家属记忆</h2>
+      <div class="meta"><%= memories.length %> 则经核实的补充</div>
+    </div>
+
+    <% if (memories.length === 0) { %>
+      <p class="memories-note">暂无家属补充。若您认识照片中的人、了解照片背后的事，欢迎提交一则记忆，经本馆核实后公开于此。</p>
+    <% } else { %>
+      <% memories.forEach(function(m){ %>
+        <div class="memory">
+          <div>
+            <span class="who"><%= m.author_name %></span>
+            <% if (m.relation) { %><span class="rel"><%= m.relation %></span><% } %>
+            <span class="when"><%= m.created_at.slice(0,10) %> 提交</span>
+          </div>
+          <p class="body"><%= m.content %></p>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <div style="margin-top:24px">
+      <a class="btn" href="/photos/<%= photo.id %>/memories/new">为这张照片补充记忆</a>
+    </div>
+  </section>
+</div>
+
+<script src="/js/compare.js"></script>
+<%- include('partials/footer') %>

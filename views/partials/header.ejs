@@ -1,0 +1,40 @@
+<% var active = typeof active !== 'undefined' ? active : ''; %>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <span class="brand-row">
+        <span class="seal-mark">旧影<br>档案</span>
+        <span>
+          <span class="brand-name">旧影修复档案馆</span><br>
+          <span class="brand-sub">RESTORED&nbsp;PHOTOGRAPHS&nbsp;ARCHIVE</span>
+        </span>
+      </span>
+    </a>
+    <nav class="site-nav">
+      <a href="/" class="<%= active === 'home' ? 'active' : '' %>">馆首页</a>
+      <a href="/photos" class="<%- active === 'browse' ? 'active' : '' %>">档案浏览</a>
+      <% if (currentUser) { %>
+        <a href="/admin" class="<%= active.indexOf('admin') === 0 ? 'active' : '' %>">工作台</a>
+        <a href="/logout">退出</a>
+      <% } else { %>
+        <a href="/login" class="<%= active === 'login' ? 'active' : '' %>">工作人员</a>
+      <% } %>
+    </nav>
+  </div>
+</header>
+<% if (currentUser) { %>
+<div class="admin-bar">
+  <div class="wrap">
+    <span class="admin-title">档案馆工作台</span>
+    <nav>
+      <a href="/admin" class="<%= active === 'admin' ? 'active' : '' %>">概览</a>
+      <a href="/admin/photos" class="<%- ['admin-photos','admin-photo-form','admin-photo-edit'].indexOf(active) !== -1 ? 'active' : '' %>">照片档案</a>
+      <a href="/admin/memories" class="<%= active === 'admin-memories' ? 'active' : '' %>">家属记忆
+        <% if (typeof pendingCounts !== 'undefined' && pendingCounts.memories) { %><span class="badge pending" style="margin-left:4px"><%= pendingCounts.memories %></span><% } %>
+      </a>
+    </nav>
+    <span><%= currentUser.display_name %> · <a href="/logout">退出登录</a></span>
+  </div>
+</div>
+<% } %>
+<main>

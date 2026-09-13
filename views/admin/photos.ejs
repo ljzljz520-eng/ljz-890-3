@@ -1,0 +1,51 @@
+<%- include('../partials/head', { pageTitle: '照片档案管理' }) %>
+<%- include('../partials/header', { active: 'admin-photos', pendingCounts: pendingCounts }) %>
+<%- include('../partials/flash') %>
+
+<div class="wrap admin-main">
+  <div class="admin-head">
+    <h1>照片档案（<%= photos.length %>）</h1>
+    <a class="btn" href="/admin/photos/new">上传新档案</a>
+  </div>
+
+  <div class="table-card">
+    <table class="data">
+      <thead>
+        <tr>
+          <th></th><th>编号 / 标题</th><th>年代</th><th>人物</th><th>来源</th>
+          <th>状态</th><th>记忆</th><th>入藏时间</th><th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (photos.length === 0) { %>
+          <tr><td colspan="9" style="text-align:center;color:var(--ink-faint);padding:40px">还没有照片档案，点击右上角上传第一份。</td></tr>
+        <% } %>
+        <% photos.forEach(function(p){ %>
+          <tr>
+            <td><img class="thumb" src="/uploads/<%= p.image_after %>" alt=""></td>
+            <td>
+              <div style="font-family:var(--mono);font-size:12px;color:var(--seal)"><%= p.archive_no %></div>
+              <strong><a href="/photos/<%= p.id %>" target="_blank"><%= p.title %></a></strong>
+            </td>
+            <td><%= p.era %></td>
+            <td style="max-width:180px"><%= p.subject ? truncate(p.subject, 30) : '—' %></td>
+            <td style="max-width:140px"><%= p.source ? truncate(p.source, 20) : '—' %></td>
+            <td><span class="badge <%= p.status %>"><%= {published:'已公开',draft:'草稿',archived:'已归档'}[p.status] %></span></td>
+            <td><%= p.memory_count %></td>
+            <td style="white-space:nowrap;font-size:13px;color:var(--ink-faint)"><%= p.created_at.slice(0,10) %></td>
+            <td>
+              <div class="actions">
+                <a class="btn secondary small" href="/admin/photos/<%= p.id %>/edit">编辑</a>
+                <form method="post" action="/admin/photos/<%= p.id %>/delete" onsubmit="return confirm('确认删除《<%= p.title %>》及其全部记忆？此操作不可恢复。')">
+                  <button class="btn danger small" type="submit">删除</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

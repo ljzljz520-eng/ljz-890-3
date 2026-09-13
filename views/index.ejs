@@ -1,0 +1,38 @@
+<%- include('partials/head') %>
+<%- include('partials/header', { active: 'home' }) %>
+<%- include('partials/flash') %>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="kicker">以 修 复 守 住 旧 时 光</div>
+    <h1>旧影修复档案馆</h1>
+    <p class="lead">
+      这里收录经修复的家庭老照片：修复前的残损原貌、修复后的影像，
+      连同拍摄年代、人物说明与入藏来源一并归档。家属的补充记忆，
+      经本馆工作人员核实后，将附于照片之下永久保存。
+    </p>
+    <div class="rule"></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="section-head">
+    <h2>新近入藏</h2>
+    <div class="meta">共 <%= total %> 份公开档案</div>
+  </div>
+
+  <% if (photos.length === 0) { %>
+    <div class="empty">档案馆尚在筹备，暂无公开照片。</div>
+  <% } else { %>
+    <div class="photo-grid">
+      <% photos.forEach(function(p){ %>
+        <%- include('partials/photo-card', { p: p }) %>
+      <% }) %>
+    </div>
+    <div style="text-align:center; margin: 8px 0 10px;">
+      <a class="btn secondary" href="/photos">进入档案浏览</a>
+    </div>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>
